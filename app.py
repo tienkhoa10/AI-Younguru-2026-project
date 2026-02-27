@@ -144,17 +144,32 @@ questions = [
 ]
 
 # =========================
-# CHẤM ĐIỂM
+# HIỂN THỊ CÂU HỎI (KHÔNG CHẤM NGAY)
 # =========================
 
-score = 0
-level_score = {"Nhận biết":0,"Thông hiểu":0,"Vận dụng":0}
+for i, q in enumerate(questions):
+    st.markdown(f"### Câu {i+1}: {q['question']}")
+    st.radio(
+        "Chọn đáp án:",
+        q["options"],
+        key=f"q{i}",
+        index=None   # 🔥 Quan trọng: không chọn sẵn
+    )
 
-for i,q in enumerate(questions):
-    ans = st.radio(q["question"], q["options"], key=f"q{i}")
-    if ans == q["answer"]:
-        score += 1
-        level_score[q["level"]] += 1
+# =========================
+# CHẤM ĐIỂM KHI BẤM NÚT
+# =========================
+
+if st.button("Phân tích AI & Tạo lộ trình học"):
+
+    score = 0
+    level_score = {"Nhận biết":0,"Thông hiểu":0,"Vận dụng":0}
+
+    for i, q in enumerate(questions):
+        user_answer = st.session_state.get(f"q{i}")
+        if user_answer == q["answer"]:
+            score += 1
+            level_score[q["level"]] += 1
 
 # =========================
 # PHÂN TÍCH AI NÂNG CAO
